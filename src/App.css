@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+AU+QLD&display=swap');
+@import url("./css/header.css");
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
