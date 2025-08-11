@@ -23,6 +23,13 @@ export default function LoginModal() {
     setPasswordStatus(val.length > 5 ? "success" : "error");
   };
 
+  const clearForm = () =>{
+    setEmail("");
+    setPassword("");
+    setEmailStatus("");
+    setPasswordStatus("");
+  }
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -35,6 +42,7 @@ export default function LoginModal() {
       console.error("Login error:", error);
       alert(error.message);
     }
+    clearForm();
     setLoading(false);
   };
 
@@ -83,7 +91,7 @@ export default function LoginModal() {
           </fieldset>
 
           {/* Password */}
-          <fieldset className="fieldset border border-base-300 p-4 rounded-box">
+          <fieldset className="fieldset border border-base-300 p-4  mb-0 rounded-box">
             <legend className="fieldset-legend text-sm">Password</legend>
             <input
               type="password"
@@ -99,9 +107,19 @@ export default function LoginModal() {
               }`}
             />
           </fieldset>
+          <button
+              type="button"
+              className="btn btn-link text-theme"
+              onClick={() => {
+                document.getElementById("login_modal").close();
+                document.getElementById("forgot_password_modal").showModal();
+              }}
+            >
+              Forgot Password?
+            </button>
 
           {/* Actions */}
-          <div className="modal-action flex flex-col gap-2">
+          <div className="modal-action flex flex-col gap-2 mt-0">
             <button type="submit" className="btn btn-warning w-full" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </button>
@@ -110,6 +128,7 @@ export default function LoginModal() {
               className="btn btn-outline w-full"
               onClick={handleGoogleLogin}
             >
+              <i class="fa-brands fa-google"></i> &nbsp;&nbsp;
               Sign in with Google
             </button>
             <button
