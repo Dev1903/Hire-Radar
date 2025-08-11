@@ -1,0 +1,23 @@
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  z-index: 9999;
+
+  background: linear-gradient(90deg, #eab308, #facc15, #fbbf24);
+  background-size: 200% 100%;
+  animation: glow-move 1.5s linear infinite;
+
+  box-shadow: 0 0 10px #facc15, 0 0 20px #facc15, 0 0 30px #facc15;
+  transition: width 0.1s ease-out;
+}
+
+@keyframes glow-move {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

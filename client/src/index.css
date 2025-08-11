@@ -1,0 +1,36 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+
+@layer utilities {
+  .text-theme {
+    @apply text-yellow-500;
+  }
+
+}
+
+@layer components {
+  .header .navbar-centre ul li>* {
+    @apply m-120;
+  }
+}
+
+.text-glow:hover {
+  color: #eab308;
+  /* optional */
+  text-shadow: 0px 0px 35px #eab208cc;
+  transform: scale(1.05);
+}
+
+.text-glow {
+  transition: transform 0.3s ease;
+  font-family: "Playwrite AU QLD", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.card {
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}

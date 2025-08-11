@@ -1,0 +1,8 @@
+.header .navbar-center>ul>li {
+    margin: 0 50px;
+    font-size: medium;
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: italic;
+}
