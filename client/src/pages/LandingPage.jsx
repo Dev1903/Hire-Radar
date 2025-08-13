@@ -7,11 +7,19 @@ import ScrollProgress from '../utils/HorizontalScrollbar'
 import LoginModal from '../components/auth/LoginModal'
 import SignupModal from '../components/auth/SignupModal'
 import ForgotPasswordModal from '../components/auth/ForgotPasswordModal'
-import Footer from '../components/Footer'
+import Footer from '../section/Footer'
+import Notfound from "../Notfound.json"
+import Lottie from "lottie-react"
 const LandingPage = () => {
   return (
     <div >
-    <div id="home1"></div>
+      <div id="home1"></div>
+
+     {/* <div style={{height: "480px", width:"480px"}}>
+      <Lottie animationData={Notfound} loop />
+     </div> */}
+
+
       <ScrollProgress />
       <LoginModal />
       <SignupModal />
@@ -19,11 +27,11 @@ const LandingPage = () => {
       <div className='header sticky top-0 z-50 backdrop-blur-[3px]'>
         <Header />
       </div>
-      
+
       <div id='about' className="about pt-20">
         <About />
       </div>
-      <div id='reviews' className="reviews pt-50">
+      <div  id='reviews' className="reviews pt-50" >
         <Reviews />
       </div>
       <div id='contact' className="footer pt-50">

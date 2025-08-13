@@ -1,0 +1,20 @@
+# Server Env
+flask
+flask-cors
+
+# Job Search
+PyMuPDF
+python-docx
+docx2txt
+nltk
+requests
+pandas
+
+# ATS Score Check
+PyPDF2
+spacy
+nltk
+
+# Resume Maker
+google-generativeai
+fpdf
