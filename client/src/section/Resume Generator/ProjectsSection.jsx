@@ -19,8 +19,8 @@ export default function ProjectsSection({ section, handleSectionChange, hideSect
   }
 
   return (
-    <fieldset className="fieldset border border-yellow-500 p-4 mb-2 rounded-box hover:cursor-grab">
-      <legend className="fieldset-legend text-lg">{section.label}</legend>
+    <fieldset className="fieldset border border-indigo-400 dark:border-yellow-500 p-4 mb-2 rounded-box hover:cursor-grab">
+      <legend className="fieldset-legend text-lg section-text-theme">{section.label}</legend>
       {projects.map((p, i) => (
         <div key={i} className="border p-2 rounded mb-2">
           <input placeholder="Title" value={p.title} onChange={e => updateProject(i, "title", e.target.value)} className="input w-full mb-1"/>

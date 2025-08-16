@@ -12,7 +12,7 @@ const About = () => {
                     HireRadar is your career's secret weapon — combining ATS Resume Checker, Smart Job Search, and AI Resume Maker in one powerful platform.
                 </div>
                 <div className=" flex justify-center pt-10">
-                    <div className=' btn btn-soft btn-warning  w-max text-xl'>
+                    <div className=' btn custom-btn w-max text-xl'>
                         <span><Link to="/score-check">Scan Your Resume</Link></span>
                     <i class="fa-solid fa-arrow-right-long pt-1"></i>
                     </div>

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 
 const ReviewCard = ({ username, image, review, rating }) => {
     return (
-        <div className="card sm:w-96 bg-base-100 card-md rounded-3xl mb-10 mt-1">
+        <div className="card sm:w-96 dark:bg-base-100 card-md rounded-3xl mb-10 mt-1">
             <div className="card-body">
                 <div className="card-title text-3xl flex justify-between">
                     <i class="fa-solid fa-quote-left"></i>
@@ -13,7 +13,7 @@ const ReviewCard = ({ username, image, review, rating }) => {
                     </div>
                 </div>
                 <p className='text-right text-[10px] pt-2'><span className='text-2xl pe-1'>{username}</span> SAYS</p>
-                <p>{review}</p>
+                <p className='text-glow'>{review}</p>
                 <div className="justify-end card-actions pt-2">
                     <Box>
                         <Rating

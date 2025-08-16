@@ -7,7 +7,7 @@ const MM_TO_PX = 3.78;
 export default function PreviewPDF({ sections, formData }) {
   const containerRef = useRef();
   const sectionRefs = useRef([]);
-  sectionRefs.current = [];
+
 
   const [scale, setScale] = useState(1);
   const [pages, setPages] = useState([]);
@@ -19,6 +19,9 @@ export default function PreviewPDF({ sections, formData }) {
       sec.content &&
       (Array.isArray(sec.content) ? sec.content.length > 0 : sec.content.trim() !== "")
   );
+  useEffect(() => {
+    sectionRefs.current = [];
+  }, [activeSections]);
 
   const addToRefs = (el) => {
     if (el && !sectionRefs.current.includes(el)) {
@@ -42,12 +45,11 @@ export default function PreviewPDF({ sections, formData }) {
   useEffect(() => {
     const pageHeightPx = A4_HEIGHT_MM * MM_TO_PX;
 
-    // Measure personal info height dynamically
     const personalInfoHeight =
       containerRef.current?.querySelector(".personal-info")?.offsetHeight || 100;
 
     let currentPage = [];
-    let currentHeight = personalInfoHeight; // start with personal info height
+    let currentHeight = personalInfoHeight;
     const newPages = [];
 
     const pushPage = () => {
@@ -58,7 +60,7 @@ export default function PreviewPDF({ sections, formData }) {
 
     activeSections.forEach((sec, idx) => {
       const sectionEl = sectionRefs.current[idx];
-      const sectionHeight = sectionEl?.offsetHeight || 200; // fallback to 200 if not rendered yet
+      const sectionHeight = sectionEl?.offsetHeight || 200;
 
       if (currentHeight + sectionHeight > pageHeightPx) {
         pushPage();
@@ -73,7 +75,11 @@ export default function PreviewPDF({ sections, formData }) {
     pushPage();
     setPages(newPages.length ? newPages : [[]]);
     setCurrentPageIndex(0);
-  }, [activeSections, formData]);
+  }, [
+    JSON.stringify(activeSections),
+    JSON.stringify(formData)
+  ]);
+
 
   const scrollToPage = (index) => {
     if (!containerRef.current) return;
@@ -92,7 +98,7 @@ export default function PreviewPDF({ sections, formData }) {
         {pages.map((page, idx) => (
           <div
             key={idx}
-            className="mx-auto bg-white shadow-lg mb-4"
+            className="mx-auto bg-gray-100 dark:bg-white shadow-lg mb-4"
             style={{
               width: `${A4_WIDTH_MM * MM_TO_PX}px`,
               minHeight: `${A4_HEIGHT_MM * MM_TO_PX}px`,
@@ -105,7 +111,7 @@ export default function PreviewPDF({ sections, formData }) {
             {/* Always show personal info */}
             {idx === 0 && (
               <div className="text-center mb-6 personal-info">
-                <h1 className="text-xl font-bold break-words">{formData.full_name || ""}</h1>
+                <h1 className="text-xl text-black font-bold break-words">{formData.full_name || ""}</h1>
                 <p className="text-neutral-600 break-words">
                   {formData.email || ""} | {formData.phone || ""}
                 </p>
@@ -131,14 +137,14 @@ export default function PreviewPDF({ sections, formData }) {
                     </div>
                   ))
                 ) : (
-                  <p className="whitespace-pre-wrap break-words text-sm">{sec.content}</p>
+                  <p className="whitespace-pre-wrap break-words text-sm text-black">{sec.content}</p>
                 )}
               </div>
             ))}
           </div>
         ))}
       </div>
-
+      {/* PAGINATION */}
       {pages.length > 1 && (
         <div className="flex justify-center items-center gap-2 p-2 bg-gray-200">
           <button

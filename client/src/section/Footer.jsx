@@ -4,12 +4,12 @@ const Footer = () => {
     return (
         <footer className=" text-gray-300 w-full">
             {/* Top Footer */}
-            <div className="py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap- w-full text-center">
+            <div className="py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap- w-full sm:text-center ps-5 sm:ms-0">
 
                 {/* Column 1: Brand & Social */}
-                <div>
-                    <h2 className="text-xl font-bold text-white mb-4 text-theme">HireRadar</h2>
-                    <p className="text-gray-400 mb-4">
+                <div className='mb-15'>
+                    <h2 className="text-xl font-bold mb-4 text-indigo-600 dark:text-white">HireRadar</h2>
+                    <p className="text-gray-400 mb-4 text-glow break-words">
                         Making the web a better place with modern solutions.
                     </p>
                     <div className="flex space-x-18 justify-center text-2xl text-theme">
@@ -26,8 +26,8 @@ const Footer = () => {
                 </div>
 
                 {/* Column 2: Quick Links */}
-                <div>
-                    <h2 className="text-xl font-bold text-theme mb-4">Quick Links</h2>
+                <div className='mb-15'>
+                    <h2 className="text-xl font-bold mb-4 text-indigo-600 dark:text-white">Quick Links</h2>
                     <ul className="space-y-2">
                         <li className="text-glow"><a
                             href="#home1"
@@ -70,11 +70,11 @@ const Footer = () => {
 
                 {/* Column 3: Contact */}
                 <div>
-                    <h2 className="text-xl font-bold text-theme mb-4">Contact Us</h2>
+                    <h2 className="text-xl font-bold text-indigo-600 dark:text-white mb-4">Contact Us</h2>
                     <ul className="space-y-2">
-                        <li><span className='text-theme'>Email:</span> <a href="mailto:contact@hireradar.com">contact@hireradar.com</a></li>
-                        <li><span className='text-theme'>Phone:</span> <a href="tel:+123 456 789">+123 456 789</a></li>
-                        <li><span className='text-theme'>Address:</span> <a href="https://maps.app.goo.gl/T1suMdCFzcaLmLHd9">123 Auj-para-gaon, Kolkata, India</a></li>
+                        <li><span className='text-theme'>Email:</span> <a href="mailto:contact@hireradar.com" className='text-glow'>contact@hireradar.com</a></li>
+                        <li><span className='text-theme'>Phone:</span> <a href="tel:+123 456 789" className='text-glow'>+123 456 789</a></li>
+                        <li><span className='text-theme'>Address:</span> <a href="https://maps.app.goo.gl/T1suMdCFzcaLmLHd9" className='text-glow'>123 Auj-para-gaon, Kolkata, India</a></li>
                     </ul>
                 </div>
             </div>

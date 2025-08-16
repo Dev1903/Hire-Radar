@@ -2,12 +2,20 @@
 @plugin "daisyui";
 
 
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer utilities {
   .text-theme {
-    @apply text-yellow-500;
+    @apply text-indigo-900 dark:text-yellow-500;
   }
+  .section-text-theme {
+    @apply text-indigo-500 dark:text-white;
+  }
+}
 
+
+input:not([type="checkbox"]), textarea {
+  @apply bg-gray-100 dark:bg-transparent border-1 border-indigo-500 dark:border-yellow-300;
 }
 
 @layer components {
@@ -16,21 +24,59 @@
   }
 }
 
-.text-glow:hover {
-  color: #eab308;
-  /* optional */
-  text-shadow: 0px 0px 35px #eab208cc;
-  transform: scale(1.05);
-}
-
-.text-glow {
-  transition: transform 0.3s ease;
+.radial-progress{
   font-family: "Playwrite AU QLD", cursive;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
 }
+/* Base text-glow for both modes */
+/* global.css or main.css */
+.text-glow {
+  @apply transition-transform duration-300; /* Tailwind utilities */
+  font-family: "Playwrite AU QLD", cursive;
+  font-weight: 400;
+  font-style: normal;
+  color: #312E81; /* Light mode color */
+}
+
+.text-glow:hover {
+  @apply scale-105;
+  color: #3730A3;
+  text-shadow: 0 0 35px #6366f1; /* Tailwind can't apply text-shadow directly */
+}
+
+.dark .text-glow {
+  color: #eab308; /* Dark mode base color */
+}
+
+.dark .text-glow:hover {
+  @apply scale-105;
+  text-shadow: 0 0 35px #eab208cc; /* Dark mode glow */
+  color: #eab308;
+}
+
+
+
 
 .card {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+
+/* Light mode (default) */
+.custom-btn {
+  background-color: #312E81; /* indigo-500 */
+  color: white;
+}
+
+/* Dark mode override */
+.dark .custom-btn {
+  background-color: #eab308; /* yellow-500 */
+  color: black;
+}
+
+/* Optional: hover effect */
+.custom-btn:hover {
+  filter: brightness(1.1);
 }

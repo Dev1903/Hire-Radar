@@ -5,12 +5,16 @@ import LandingPage from './pages/LandingPage';
 import ScoreChecker from './pages/ScoreChecker';
 import ResumeMaker from './pages/ResumeMaker';
 import JobSearch from './pages/JobSearch';
+import ScrollToHash from './utils/ScrollToHash';
+import { ThemeProvider } from './context/ThemeContext';
 
 
 function App() {
 
   return (
-    <BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+    <ScrollToHash />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/score-check" element={<ScoreChecker />} />
@@ -20,6 +24,7 @@ function App() {
         <Route path="/signup" element={<LandingPage />} />
       </Routes>
     </BrowserRouter>
+    </ThemeProvider>
   )
     
 }

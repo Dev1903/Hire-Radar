@@ -1,12 +1,12 @@
 import React from "react";
 
-export default function AchievementsSection({ section, handleSectionChange, hideSection }) {
+export default function CertificationSection({ section, handleSectionChange, hideSection }) {
   const items = Array.isArray(section.content) ? section.content : [];
 
   const addItem = () => {
     handleSectionChange(section.id, [
       ...items,
-      { title: "", subtitle: "", description: "" },
+      { title: "", subtitle: "", description: "", link: "" },
     ]);
   };
 
@@ -32,7 +32,7 @@ export default function AchievementsSection({ section, handleSectionChange, hide
           <input
             type="text"
             className="input w-full mb-2"
-            placeholder="Achievement Title"
+            placeholder="Title"
             value={item.title}
             onChange={(e) => updateItem(i, "title", e.target.value)}
           />
@@ -53,6 +53,14 @@ export default function AchievementsSection({ section, handleSectionChange, hide
             onChange={(e) => updateItem(i, "description", e.target.value)}
           />
 
+          <input
+            type="text"
+            className="input w-full mb-2"
+            placeholder="Link (optional)"
+            value={item.link}
+            onChange={(e) => updateItem(i, "link", e.target.value)}
+          />
+
           <button
             type="button"
             className="btn btn-sm btn-error"
@@ -68,7 +76,7 @@ export default function AchievementsSection({ section, handleSectionChange, hide
         type="button"
         onClick={addItem}
       >
-        Add Achievement
+        Add {section.label}
       </button>
 
       <button

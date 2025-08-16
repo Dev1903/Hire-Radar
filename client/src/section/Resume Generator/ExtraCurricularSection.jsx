@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 
-export default function LanguagesSection({ section, handleSectionChange, hideSection }) {
+export default function ExtraCurricularSection({ section, handleSectionChange, hideSection }) {
   const [input, setInput] = useState("");
-  const langs = section.content ? section.content.split(",") : [];
+  const activities = section.content ? section.content.split(",") : [];
 
-  const addLang = () => {
+  const addActivity = () => {
     if (!input.trim()) return;
-    handleSectionChange(section.id, [...langs, input.trim()].join(","));
+    const newActivities = [...activities, input.trim()];
+    handleSectionChange(section.id, newActivities.join(","));
     setInput("");
   };
 
-  const removeLang = (lang) => {
-    handleSectionChange(section.id, langs.filter(l => l !== lang).join(","));
+  const removeActivity = (activity) => {
+    handleSectionChange(section.id, activities.filter((s) => s !== activity).join(","));
   };
 
   return (
     <fieldset className="fieldset border border-indigo-400 dark:border-yellow-500 p-4 mb-2 rounded-box hover:cursor-grab">
       <legend className="fieldset-legend text-lg section-text-theme">{section.label}</legend>
       <div className="flex gap-2 flex-wrap mb-2">
-        {langs.map((l) => (
-          <span key={l} className="bg-indigo-200 dark:bg-yellow-500 px-2 py-1 rounded-full flex items-center gap-1 section-text-theme">
-            {l} <button onClick={() => removeLang(l)}>×</button>
+        {activities.map((activity) => (
+          <span key={activity} className="bg-indigo-200 dark:bg-yellow-500 px-2 py-1 rounded-full flex items-center gap-1 section-text-theme">
+            {activity} <button onClick={() => removeActivity(activity)}><i class="fa-solid fa-xmark"></i></button>
           </span>
         ))}
       </div>
@@ -32,7 +33,7 @@ export default function LanguagesSection({ section, handleSectionChange, hideSec
           onChange={(e) => setInput(e.target.value)}
           className="input input-sm flex-1"
         />
-        <button type="button" className="btn btn-sm btn-outline" onClick={addLang}>
+        <button type="button" className="btn btn-sm btn-outline" onClick={addActivity}>
           Add
         </button>
       </div>

@@ -16,12 +16,12 @@ export default function SkillsSection({ section, handleSectionChange, hideSectio
   };
 
   return (
-    <fieldset className="fieldset border border-yellow-500 p-4 mb-2 rounded-box hover:cursor-grab">
-      <legend className="fieldset-legend text-lg">{section.label}</legend>
+    <fieldset className="fieldset border border-indigo-400 dark:border-yellow-500 p-4 mb-2 rounded-box hover:cursor-grab">
+      <legend className="fieldset-legend text-lg section-text-theme">{section.label}</legend>
       <div className="flex gap-2 flex-wrap mb-2">
         {skills.map((skill) => (
-          <span key={skill} className="bg-blue-300 px-2 py-1 rounded-full flex items-center gap-1">
-            {skill} <button onClick={() => removeSkill(skill)}>×</button>
+          <span key={skill} className="bg-indigo-200 dark:bg-yellow-500 px-2 py-1 rounded-full flex items-center gap-1 section-text-theme">
+            {skill} <button onClick={() => removeSkill(skill)}><i class="fa-solid fa-xmark"></i></button>
           </span>
         ))}
       </div>

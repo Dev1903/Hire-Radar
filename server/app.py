@@ -9,25 +9,23 @@ CORS(app)
 
 @app.route("/upload_resume", methods=["POST"])
 def upload_resume():
-    # print(request.form)
     print(request.files)
     if "resume" not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
-    if "location" not in request.form:
         return jsonify({"error": "No file uploaded"}), 400
     if "model" not in request.form:
         return jsonify({"error": "No model number added"}), 400
 
     file = request.files["resume"]
-    location = request.form["location"]
+    location = request.form.get("location", "")
     model = request.form["model"]
     result = "No File"
-    
+
     if model == '1':
-        result = process_resume_file(file, location)
+        result = process_resume_file(file)
     elif model == '2':
         result = run_ats_scoring(file.stream, file.filename)
     return jsonify(result)
+
 
 @app.route("/generate_resume", methods=["POST"])
 def generate_resume_route():

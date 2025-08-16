@@ -34,8 +34,8 @@ export default function EducationSection({ section, handleSectionChange, hideSec
   }
 
   return (
-    <fieldset className="fieldset border border-yellow-500 p-4 mb-2 rounded-box hover:cursor-grab">
-      <legend className="fieldset-legend text-lg">{section.label}</legend>
+    <fieldset className="fieldset border border-indigo-400 dark:border-yellow-500 p-4 mb-2 rounded-box hover:cursor-grab">
+      <legend className="fieldset-legend text-lg section-text-theme">{section.label}</legend>
 
       {educations.map((ed, i) => (
         <div key={i} className="border p-2 rounded mb-2">

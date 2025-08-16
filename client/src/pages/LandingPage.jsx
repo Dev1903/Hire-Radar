@@ -8,16 +8,12 @@ import LoginModal from '../components/auth/LoginModal'
 import SignupModal from '../components/auth/SignupModal'
 import ForgotPasswordModal from '../components/auth/ForgotPasswordModal'
 import Footer from '../section/Footer'
-import Notfound from "../Notfound.json"
-import Lottie from "lottie-react"
 const LandingPage = () => {
   return (
     <div >
       <div id="home1"></div>
 
-     {/* <div style={{height: "480px", width:"480px"}}>
-      <Lottie animationData={Notfound} loop />
-     </div> */}
+     
 
 
       <ScrollProgress />

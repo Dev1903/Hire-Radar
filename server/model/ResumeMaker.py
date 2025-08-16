@@ -94,11 +94,9 @@ def generate_resume(input_data):
     pdf.add_page()
     pdf.set_compact_style(1.0)
 
-    # Generate sections
     for section in input_data.get('section_order', []):
         sec = section.lower()
         content = input_data.get(section.replace(" ", "_"), None)
-
         if not content:
             continue
 
@@ -111,56 +109,79 @@ def generate_resume(input_data):
         elif sec == "education":
             pdf.add_section("Education")
             for edu in content:
-                line = f"{edu.get('type','')} | {edu.get('institution','')} | {edu.get('duration','')} | {edu.get('cgpa','')}"
-                pdf.add_colored_subheader(line)
-            if input_data.get('class_xii'):
-                pdf.add_colored_subheader("Class XII")
-                pdf.add_text(input_data['class_xii'])
-            if input_data.get('class_x'):
-                pdf.add_colored_subheader("Class X")
-                pdf.add_text(input_data['class_x'])
+                title_line = f"{edu.get('type', '')} - {edu.get('institution', '')}".strip(" -")
+                pdf.add_colored_subheader(title_line)
+                details = []
+                if edu.get('duration'):
+                    details.append(edu['duration'])
+                if edu.get('cgpa'):
+                    details.append(f"CGPA/Percentage: {edu['cgpa']}")
+                if details:
+                    pdf.add_text(" | ".join(details))
+            pdf.ln(2)
 
         # Work Experience
         elif sec == "work experience":
             pdf.add_section("Work Experience")
-            if isinstance(content, list):
-                for exp in content:
-                    if isinstance(exp, dict):
-                        title = exp.get('title', '')
-                        subtitle = exp.get('subtitle', '')
-                        pdf.add_colored_subheader(f"{title} | {subtitle}" if subtitle else title)
-                        desc = exp.get('description', '')
-                        if desc:
-                            pdf.add_text(desc, bullet=True)
-                    else:
-                        pdf.add_text(str(exp))
-            else:
-                pdf.add_text(content)
+            for exp in content:
+                title = exp.get('title', '')
+                subtitle = exp.get('subtitle', '')
+                header_text = f"{title} | {subtitle}" if subtitle else title
+                pdf.add_colored_subheader(header_text)
+                if exp.get('duration'):
+                    pdf.add_text(f"Duration: {exp['duration']}")
+                if exp.get('description'):
+                    pdf.add_text(exp['description'], bullet=True)
+                if exp.get('link'):
+                    pdf.set_text_color(0, 102, 204)
+                    pdf.add_text(f"Link: {exp['link']}")
+                    pdf.set_text_color(0, 0, 0)
+            pdf.ln(2)
 
         # Projects
         elif sec == "projects":
             pdf.add_section("Projects")
             for proj in content:
-                title = proj.get('title', '')
-                subtitle = proj.get('subtitle', '')
-                link = proj.get('link', '')
-                pdf.add_colored_subheader(f"{title} | {subtitle}" if subtitle else title)
-                pdf.add_text(proj.get('description', ''), bullet=True)
-                if link:
+                header_text = f"{proj.get('title', '')} | {proj.get('subtitle', '')}" if proj.get('subtitle') else proj.get('title', '')
+                pdf.add_colored_subheader(header_text)
+                if proj.get('duration'):
+                    pdf.add_text(f"Duration: {proj['duration']}")
+                if proj.get('description'):
+                    pdf.add_text(proj['description'], bullet=True)
+                if proj.get('link'):
                     pdf.set_text_color(0, 102, 204)
-                    pdf.add_text(f"Link: {link}")
+                    pdf.add_text(f"Link: {proj['link']}")
                     pdf.set_text_color(0, 0, 0)
+            pdf.ln(2)
 
-        # Skills, Certifications, Languages, Achievements
+        # Extra Curricular Activities & Certifications (nested arrays)
+        elif sec in ["extra curricular activities", "certifications"]:
+            pdf.add_section(section)
+            for item in content:
+                title = item.get('title', '')
+                subtitle = item.get('subtitle', '')
+                header_text = f"{title} | {subtitle}" if subtitle else title
+                pdf.add_colored_subheader(header_text)
+                if item.get('duration'):
+                    pdf.add_text(f"Duration: {item['duration']}")
+                if item.get('description'):
+                    pdf.add_text(item['description'], bullet=True)
+                if item.get('link'):
+                    pdf.set_text_color(0, 102, 204)
+                    pdf.add_text(f"Link: {item['link']}")
+                    pdf.set_text_color(0, 0, 0)
+            pdf.ln(2)
+
+        # Skills, Languages, Achievements (simple lists)
         else:
             pdf.add_section(section)
             if isinstance(content, list):
                 for item in content:
                     if isinstance(item, dict):
-                        sub = item.get('sub', '')
-                        desc = item.get('desc', '')
-                        if sub:
-                            pdf.add_colored_subheader(sub)
+                        title = item.get('title') or item.get('sub', '')
+                        desc = item.get('description') or item.get('desc', '')
+                        if title:
+                            pdf.add_colored_subheader(title)
                         if desc:
                             pdf.add_text(desc, bullet=True)
                     else:
@@ -168,6 +189,5 @@ def generate_resume(input_data):
             else:
                 pdf.add_text(str(content))
 
-    # Output PDF as bytes
     pdf_bytes = pdf.output(dest='S').encode('latin-1', 'replace')
     return io.BytesIO(pdf_bytes)

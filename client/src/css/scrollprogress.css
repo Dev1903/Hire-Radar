@@ -1,4 +1,4 @@
-.scroll-progress {
+.dark .scroll-progress {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,20 @@
   box-shadow: 0 0 10px #facc15, 0 0 20px #facc15, 0 0 30px #facc15;
   transition: width 0.1s ease-out;
 }
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  z-index: 9999;
 
+  background: linear-gradient(90deg, #312e81, #3730a3, #4338ca); /* Indigo shades */
+  background-size: 200% 100%;
+  animation: glow-move 1.5s linear infinite;
+
+  box-shadow: 0 0 10px #4338ca, 0 0 20px #3730a3, 0 0 30px #312e81;
+  transition: width 0.1s ease-out;
+}
 @keyframes glow-move {
   0% {
     background-position: 200% 0;

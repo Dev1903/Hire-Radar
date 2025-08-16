@@ -14,10 +14,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+    <script>
+  if (
+    localStorage.theme === "dark" ||
+    (!("theme" in localStorage) &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+  ) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+</script>
+
+
 
 </head>
 
-<body class='min-h-screen bg-white dark:bg-gradient-to-b from-zinc-800 to-black text-theme'>
+<body class='min-h-screen bg-gradient-to-b from-indigo-200  to-white dark:from-zinc-800 dark:to-black text-theme'>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
   
