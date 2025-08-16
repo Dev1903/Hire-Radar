@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ReactSortable } from "react-sortablejs";
 import Header from "../components/Header"
 
@@ -12,6 +12,10 @@ import WorkExperienceSection from "../section/Resume Generator/WorkExperienceSec
 import CertificationSection from "../section/Resume Generator/CertificationSection";
 import ExtraCurricularSection from "../section/Resume Generator/ExtraCurricularSection";
 import PreviewPDF from "../section/Resume Generator/PreviewPDF";
+import LoginModal from "../components/auth/LoginModal";
+import SignupModal from "../components/auth/SignupModal";
+import ForgotPasswordModal from "../components/auth/ForgotPasswordModal";
+import Notiflix from "notiflix";
 
 const sectionTemplates = [
   { id: "Career Objective", label: "Career Objective", type: "career", active: true, content: "" },
@@ -26,6 +30,7 @@ const sectionTemplates = [
 ];
 
 export default function ResumeGenerator() {
+
   const [formData, setFormData] = useState({ full_name: "", email: "", phone: "", linkedin: "", github: "" });
   const [sections, setSections] = useState(sectionTemplates);
 
@@ -47,6 +52,13 @@ export default function ResumeGenerator() {
       default: return null;
     }
   }
+  const shown = useRef(false);
+  useEffect(() => {
+    if (!shown.current) {
+      Notiflix.Notify.info("Kindly Login Beforehand to avoid rewriting");
+      shown.current = true;
+    }
+  }, []);
 
   const activeSections = sections.filter(s => s.active);
 
@@ -65,49 +77,69 @@ export default function ResumeGenerator() {
 
 
   const handleGenerateResume = async () => {
-    try {
-      // Prepare the payload
-      const payload = {
-        ...formData,
-        section_order: sections.map(s => s.label), // send order of sections
-      };
+    if (!localStorage.getItem("token")) {
+      Notiflix.Notify.warning("Kindly Login to Continue !")
+      document.getElementById("login_modal").showModal();
+    }
+    else {
+      try {
+        // Prepare the payload
+        const payload = {
+          ...formData,
+          section_order: sections.map(s => s.label), // send order of sections
+        };
 
-      // Include section content
-      sections.forEach(s => {
-        const key = s.label.replace(/ /g, "_"); // match backend keys like Career_Objective
-        payload[key] = s.content;
-      });
+        // Include section content
+        sections.forEach(s => {
+          const key = s.label.replace(/ /g, "_"); // match backend keys like Career_Objective
+          payload[key] = s.content;
+        });
 
-      // POST request to backend
-      console.log(payload)
-      const response = await fetch("http://localhost:5000/generate_resume", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+        // POST request to backend
+        console.log(payload)
+        const response = await fetch("http://localhost:5000/generate_resume", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        })
+        if (!response.ok) {
+          Notiflix.Notify.failure("Failed to Generate Resume !")
+        }
+        Notiflix.Notify.success("Resume Generated Successfully !")
+        // Get the PDF as a blob
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
 
-      if (!response.ok) throw new Error("Failed to generate resume");
+        // Trigger download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "generated_resume.pdf";
+        a.click();
+        window.URL.revokeObjectURL(url);
+        setFormData(
+          {
+            full_name: "",
+            email: "",
+            phone: "",
+            linkedin: "",
+            github: ""
+          }
+        )
+        setSections(sectionTemplates)
 
-      // Get the PDF as a blob
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      // Trigger download
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "generated_resume.pdf";
-      a.click();
-      window.URL.revokeObjectURL(url);
-
-    } catch (err) {
-      console.error(err);
-      alert("Error generating resume. Check console for details.");
+      } catch (err) {
+        console.error(err);
+        Notiflix.Notify.failure("Error Generating Resume !Please try again later")
+      }
     }
   };
 
 
   return (
     <div>
+      <LoginModal />
+      <SignupModal />
+      <ForgotPasswordModal />
       <div className="header">
         <Header />
       </div>
@@ -124,7 +156,7 @@ export default function ResumeGenerator() {
                   .split(" ")
                   .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                   .join(" ")
-                }`}
+                  }`}
                 name={field}
                 value={formData[field]}
                 onChange={handleChange}

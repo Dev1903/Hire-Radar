@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { auth } from "../../utils/firebase.js";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import Notiflix from "notiflix";
 
 export default function SignupModal() {
   const [name, setName] = useState("");
@@ -14,22 +15,37 @@ export default function SignupModal() {
   const checkName = (e) => {
     const val = e.target.value;
     setName(val);
-    setNameStatus(val.length > 2 ? "success" : "error");
+
+    // Regex for: length > 4 and contains at least one space
+    const regex = /^(?=.{5,})(?=.*\s).+$/;
+
+    if (regex.test(val)) {
+      setNameStatus("success");
+    } else {
+      setNameStatus("error");
+    }
   };
+
 
   const checkEmail = (e) => {
     const val = e.target.value;
     setEmail(val);
-    setEmailStatus(val.includes("@") ? "success" : "error");
+
+    // Basic email pattern
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailStatus(regex.test(val) ? "success" : "error");
   };
 
   const checkPassword = (e) => {
     const val = e.target.value;
     setPassword(val);
-    setPasswordStatus(val.length > 5 ? "success" : "error");
+
+    // Must be at least 7 digits
+    const regex = /^\d{6,}$/;
+    setPasswordStatus(regex.test(val) ? "success" : "error");
   };
 
-  const clearForm = () =>{
+  const clearForm = () => {
     setName("");
     setEmail("");
     setPassword("");
@@ -46,11 +62,15 @@ export default function SignupModal() {
       // Update display name
       await updateProfile(userCred.user, { displayName: name });
       console.log("User registered:", userCred.user);
-      alert("Account created successfully!");
+      localStorage.setItem("token", userCred.user.accessToken)
       document.getElementById("signup_modal").close();
+      Notiflix.Notify.success(`Welcome ${userCred.user.displayName}! Redirecting.....`)
+      setTimeout(()=>{
+        window.location.reload();
+      },2000)
     } catch (error) {
       console.error("Signup error:", error);
-      alert(error.message);
+      Notiflix.Notify.failure(error.message);
     }
     clearForm();
     setLoading(false);
@@ -58,7 +78,7 @@ export default function SignupModal() {
 
   return (
     <dialog id="signup_modal" className="modal">
-      <div className="modal-box">
+      <div className="modal-box bg-indigo-200 dark:bg-base-100">
         <form onSubmit={handleSignup} className="space-y-4">
           <h3 className="font-bold text-lg">Sign Up</h3>
           <button
@@ -71,54 +91,51 @@ export default function SignupModal() {
 
           {/* Name */}
           <fieldset className="fieldset border border-base-300 p-4 rounded-box">
-            <legend className="fieldset-legend text-sm">Name</legend>
+            <legend className="fieldset-legend text-sm text-theme">Name</legend>
             <input
               type="text"
               placeholder="Enter your name"
               value={name}
-              className={`input w-full ${
-                nameStatus === "success"
+              className={`input w-full ${nameStatus === "success"
                   ? "input-success"
                   : nameStatus === "error"
-                  ? "input-error"
-                  : ""
-              }`}
+                    ? "input-error"
+                    : ""
+                }`}
               onChange={checkName}
             />
           </fieldset>
 
           {/* Email */}
           <fieldset className="fieldset border border-base-300 p-4 rounded-box">
-            <legend className="fieldset-legend text-sm">Email</legend>
+            <legend className="fieldset-legend text-sm text-theme">Email</legend>
             <input
               type="email"
               placeholder="Enter your email"
               value={email}
-              className={`input w-full ${
-                emailStatus === "success"
+              className={`input w-full ${emailStatus === "success"
                   ? "input-success"
                   : emailStatus === "error"
-                  ? "input-error"
-                  : ""
-              }`}
+                    ? "input-error"
+                    : ""
+                }`}
               onChange={checkEmail}
             />
           </fieldset>
 
           {/* Password */}
           <fieldset className="fieldset border border-base-300 p-4 rounded-box">
-            <legend className="fieldset-legend text-sm">Password</legend>
+            <legend className="fieldset-legend text-sm text-theme">Password</legend>
             <input
               type="password"
               placeholder="Enter your password"
               value={password}
-              className={`input w-full ${
-                passwordStatus === "success"
+              className={`input w-full ${passwordStatus === "success"
                   ? "input-success"
                   : passwordStatus === "error"
-                  ? "input-error"
-                  : ""
-              }`}
+                    ? "input-error"
+                    : ""
+                }`}
               onChange={checkPassword}
             />
           </fieldset>
@@ -127,7 +144,7 @@ export default function SignupModal() {
           <div className="modal-action flex flex-col gap-2">
             <button
               type="submit"
-              className="btn btn-warning w-full"
+              className="btn custom-btn w-full"
               disabled={loading}
             >
               {loading ? "Creating account..." : "Sign Up"}

@@ -13,13 +13,13 @@ const Footer = () => {
                         Making the web a better place with modern solutions.
                     </p>
                     <div className="flex space-x-18 justify-center text-2xl text-theme">
-                        <a href="https://github.com/Dev1903" className="hover:text-white" aria-label="GitHub">
+                        <a href="https://github.com/Dev1903" className="hover:text-indigo-400 dark:hover:text-white" aria-label="GitHub" target="_blank">
                             <i class="fa-brands fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/sneha-jana-504ab0282/" className="hover:text-white" aria-label="Linkedin">
+                        <a href="https://www.linkedin.com/in/sneha-jana-504ab0282/" className=" hover:text-indigo-400 dark:hover:text-white" aria-label="Linkedin" target='_blank'>
                             <i class="fa-brands fa-linkedin"></i>
                         </a>
-                        <a href="https://www.instagram.com/___debanjan.pan__/" className="hover:text-white" aria-label="Instagram">
+                        <a href="https://www.instagram.com/___debanjan.pan__/" className="hover:text-indigo-400 dark:hover:text-white" aria-label="Instagram" target='_blank'>
                             <i class="fa-brands fa-instagram"></i>
                         </a>
                     </div>

@@ -8,6 +8,10 @@ import LoadingDark from "../assets/animations/LoadingDark.json"
 import LoadingLight from "../assets/animations/LoadingLight.json"
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
+import LoginModal from "../components/auth/LoginModal";
+import SignupModal from "../components/auth/SignupModal"
+import ForgotPasswordModal from "../components/auth/ForgotPasswordModal"
+import Notiflix from "notiflix";
 
 export default function JobSearch() {
   const [jobs, setJobs] = useState([]);
@@ -32,8 +36,13 @@ export default function JobSearch() {
 
   // Upload Resume
   const handleUpload = async (uploadedFile) => {
+    if(!localStorage.getItem("token")){
+      Notiflix.Notify.warning("Kindly Login to Continue !")
+      document.getElementById("login_modal").showModal();
+    }
+    else{
     const selectedFile = uploadedFile;
-    if (!selectedFile) return alert("Please upload a resume PDF!");
+    if (!selectedFile) return Notiflix.Notify.warning("Please upload a PDF to continue")
 
     setLoading(true);
 
@@ -42,12 +51,13 @@ export default function JobSearch() {
     formData.append("page", 1);
     formData.append("model", "1");
     try {
-      const res = await fetch("http://192.168.29.104:5000/upload_resume", {
+      const res = await fetch("http://localhost:5000/upload_resume", {
         method: "POST",
         body: formData,
       });
 
       const data = await res.json();
+      Notiflix.Notify.success(`Found ${data.total_jobs} jobs as per your resume`)
       setStatus(res.status);
 
       console.log(data);
@@ -70,10 +80,11 @@ export default function JobSearch() {
       setAvailableLocations(locations);
     } catch (err) {
       console.log(err)
-      alert("Error Uploading Resume")
+      Notiflix.Notify.failure("Error finding jobs! Please try again later")
     } finally {
       setLoading(false);
     }
+  }
 
   };
 
@@ -160,8 +171,9 @@ export default function JobSearch() {
 
   return (
     <div className="min-h-screen pb-4">
-
-
+    <LoginModal />
+    <SignupModal />
+    <ForgotPasswordModal />
       <div className="header">
         <Header />
       </div>

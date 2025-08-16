@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ThemeToggle from '../utils/DarkModeToggleButton';
+import Notiflix from 'notiflix';
 
 
 const Header = () => {
@@ -89,36 +90,63 @@ const Header = () => {
                                 className="btn btn-ghost h-12 w-12 rounded-full overflow-hidden p-0 border-indigo-500 dark:border-yellow-500 border-2 text-glow"
                             >
                                 <img
-                                    src="/profile.png"
+                                    src={localStorage.getItem("dp") ? localStorage.getItem("dp") : "/profile.png"}
                                     alt="Profile"
                                     className="h-full w-full object-cover"
                                 />
                             </div>
-                            <ul
-                                tabIndex={0}
-                                className="menu dropdown-content bg-white dark:bg-base-100 rounded-box z-1 mt-3 w-max p-2 shadow absolute right-0 text-md"
-                            >
-                                <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
-                                    <a
-                                        className="justify-end"
-                                        onClick={() =>
-                                            document.getElementById("login_modal").showModal()
-                                        }
+                            {
+                                localStorage.getItem("token") ? (
+                                    <ul
+                                        tabIndex={0}
+                                        className="menu dropdown-content bg-red-300 dark:bg-red-500 dark:text-white rounded-box z-1 mt-3 w-max p-2 shadow absolute right-0 text-md"
                                     >
-                                        Login
-                                    </a>
-                                </li>
-                                <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
-                                    <a
-                                        className="justify-end"
-                                        onClick={() =>
-                                            document.getElementById("signup_modal").showModal()
-                                        }
+
+                                        <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
+                                            <a
+                                                className="justify-end"
+                                                onClick={() => {
+                                                    localStorage.removeItem("dp");
+                                                    localStorage.removeItem("token");
+                                                    Notiflix.Notify.success("Successfully Logged Out! Redirecting.....")
+                                                    setTimeout(() => {
+                                                        window.location.reload();
+                                                    }, 2000)
+                                                }
+                                                }
+                                            >
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                ) : (
+                                    <ul
+                                        tabIndex={0}
+                                        className="menu dropdown-content bg-white dark:bg-base-100 rounded-box z-1 mt-3 w-max p-2 shadow absolute right-0 text-md"
                                     >
-                                        SignUp
-                                    </a>
-                                </li>
-                            </ul>
+                                        <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
+                                            <a
+                                                className="justify-end"
+                                                onClick={() =>
+                                                    document.getElementById("login_modal").showModal()
+                                                }
+                                            >
+                                                Login
+                                            </a>
+                                        </li>
+                                        <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
+                                            <a
+                                                className="justify-end"
+                                                onClick={() =>
+                                                    document.getElementById("signup_modal").showModal()
+                                                }
+                                            >
+                                                SignUp
+                                            </a>
+                                        </li>
+                                    </ul>
+                                )
+                            }
                         </div>
                     </div>
                 </div>

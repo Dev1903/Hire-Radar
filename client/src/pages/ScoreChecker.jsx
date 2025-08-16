@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
+import LoginModal from "../components/auth/LoginModal";
+import SignupModal from "../components/auth/SignupModal";
+import ForgotPasswordModal from "../components/auth/ForgotPasswordModal";
+import Notiflix from "notiflix"
 
 export default function ScoreChecker() {
   const [result, setResult] = useState(null);
@@ -14,39 +18,48 @@ export default function ScoreChecker() {
   }
 
   const handleFile = async (file) => {
-    if (!file || file.type !== "application/pdf") {
-      alert("Please select a valid PDF file");
-      return;
+    if (!localStorage.getItem("token")) {
+      Notiflix.Notify.warning("Kindly Login to Continue !")
+      document.getElementById("login_modal").showModal();
     }
+    else {
+      if (!file || file.type !== "application/pdf") {
+        Notiflix.Notify.warning("Please select a valid PDF file");
+        return;
+      }
 
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("resume", file);
-    formData.append("location", location);
-    formData.append("model", "2");
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("resume", file);
+      formData.append("location", location);
+      formData.append("model", "2");
 
-    try {
-      const res = await fetch("http://192.168.29.104:5000/upload_resume", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      setResult(data || []);
-
-      const initialScores = {};
-      Object.keys(data.scores || {}).forEach((key) => (initialScores[key] = 0));
-      setAnimatedScores(initialScores);
-
-      setTimeout(() => {
-        setAnimatedScores({
-          ats_score: data.ats_score,
-          ...data.scores,
+      try {
+        const res = await fetch("http://localhost:5000/upload_resume", {
+          method: "POST",
+          body: formData,
         });
-      }, 100);
-    } catch (err) {
-      console.error("Upload failed:", err);
-    } finally {
-      setLoading(false);
+        Notiflix.Notify.success("Your ATS Score is Generated")
+        
+        const data = await res.json();
+        setResult(data || []);
+
+        const initialScores = {};
+        Object.keys(data.scores || {}).forEach((key) => (initialScores[key] = 0));
+        setAnimatedScores(initialScores);
+
+        setTimeout(() => {
+          setAnimatedScores({
+            ats_score: data.ats_score,
+            ...data.scores,
+          });
+        }, 100);
+      } catch (err) {
+        console.error("Upload failed:", err);
+        Notiflix.Notify.failure("Upload Failed! Please Try Again Later")
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -103,6 +116,9 @@ export default function ScoreChecker() {
 
   return (
     <div className="w-full pb-2">
+      <LoginModal />
+      <SignupModal />
+      <ForgotPasswordModal />
       {/* HEADER */}
       <div className="header">
         <Header />
@@ -132,9 +148,8 @@ export default function ScoreChecker() {
           }}
         >
           <div
-            className={`flex justify-center items-center border-2 border-dashed border-indigo-500 dark:border-yellow-500 rounded-xl p-10 h-50 w-100 text-center cursor-pointer transition-colors ${
-              dragging ? "border-blue-500 bg-blue-50" : "border-gray-400"
-            }`}
+            className={`flex justify-center items-center border-2 border-dashed border-indigo-500 dark:border-yellow-500 rounded-xl p-10 h-50 w-100 text-center cursor-pointer transition-colors ${dragging ? "border-blue-500 bg-blue-50" : "border-gray-400"
+              }`}
             onClick={() => fileInputRef.current.click()}
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}

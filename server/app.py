@@ -35,7 +35,7 @@ def generate_resume_route():
     pdf_file = generate_resume(input_data)
 
     # Send both PDF file and text in one response (PDF as download)
-    return send_file(pdf_file, download_name="generated_resume.pdf", as_attachment=True)
+    return send_file(pdf_file, download_name="HireRadar_resume.pdf", as_attachment=True)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
