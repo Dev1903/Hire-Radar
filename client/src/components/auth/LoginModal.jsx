@@ -2,6 +2,9 @@ import React, { useState, useContext } from "react";
 import { auth } from "../../utils/firebase.js";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ThemeContext } from "../../context/ThemeContext.jsx";
+import LoadingDark from "../../assets/animations/LoadingDark.json"
+import LoadingLight from "../../assets/animations/LoadingLight.json"
+import Lottie from "lottie-react";
 import Notiflix from "notiflix";
 
 export default function LoginModal() {
@@ -12,6 +15,7 @@ export default function LoginModal() {
   const [loading, setLoading] = useState(false);
 
   const { mode } = useContext(ThemeContext);
+  const loadinganimationData = mode === "dark" ? LoadingDark : LoadingLight;
 
   const provider = new GoogleAuthProvider();
 
@@ -41,41 +45,53 @@ export default function LoginModal() {
   }
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const userCred = await signInWithEmailAndPassword(auth, email, password);
-      console.log("Logged in user:", userCred.user);
-      localStorage.setItem("token", userCred.user.accessToken);
+  e.preventDefault();
+  
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    setLoading(true); // start loader
+    console.log("Logged in user:", userCred.user);
+
+    localStorage.setItem("token", userCred.user.accessToken);
+    localStorage.setItem("name", userCred.user.displayName);
+    localStorage.setItem("showAuthSuccess", userCred.user.displayName);
+
+    // Keep loading active until modal closes and page reloads
+    setTimeout(() => {
       document.getElementById("login_modal").close();
-      Notiflix.Notify.success(`Welcome ${userCred.user.displayName}! Redirecting.....`)
-      setTimeout(()=>{
-        window.location.reload();
-      },2000)
-      
+      window.location.reload();
+    }, 2000);
 
+  } catch (error) {
+    console.error("Login error:", error);
+    Notiflix.Notify.failure(error.message);
+    setLoading(false); // stop loader on error
+  } finally {
+    clearForm(); // always clear form
+    // Do NOT set loading false here if login succeeded and we're waiting for reload
+    // setLoading(false);
+  }
+};
 
-    } catch (error) {
-      console.error("Login error:", error);
-      Notiflix.Notify.failure(error.message);
-    }
-    clearForm();
-    setLoading(false);
-  };
 
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
+      setLoading(true);
+      
       console.log("Google login result:", result);
       console.log("User details:", result.user); // Full user object
       localStorage.setItem("token", result.user.accessToken);
+      localStorage.setItem("name", result.user.displayName);
+      localStorage.setItem("showAuthSuccess", result.user.displayName);
       localStorage.setItem("dp", result.user.photoURL);
-      document.getElementById("login_modal").close();
-      Notiflix.Notify.success(`Welcome ${result.user.displayName}! Redirecting.....`)
-      setTimeout(()=>{
+      
+      setTimeout(() => {
+        document.getElementById("login_modal").close();
         window.location.reload();
-      },2000)
+      }, 2000)
     } catch (error) {
+      setLoading(false)
       console.error("Google login error:", error);
       Notiflix.Notify.failure(error.message);
     }
@@ -83,6 +99,19 @@ export default function LoginModal() {
 
   return (
     <dialog id="login_modal" className="modal">
+    {loading && (
+          <div className="fixed inset-0 z-50 flex flex-col justify-center items-center">
+            {/* Semi-transparent overlay without solid color */}
+            <div className="absolute inset-0 bg-white/20 backdrop-blur-[3px]"></div>
+
+            {/* Spinner and text */}
+            <div className="relative flex flex-col justify-center items-center">
+              <div className="w-150 h-100 flex justify-center items-center">
+                <Lottie animationData={loadinganimationData} loop />
+              </div>
+            </div>
+          </div>
+        )}
       <div className="modal-box bg-indigo-200 dark:bg-base-100">
         <form onSubmit={handleLogin} className="space-y-4">
           <h3 className="font-bold text-lg">Login</h3>
@@ -91,7 +120,7 @@ export default function LoginModal() {
             type="button"
             onClick={() => document.getElementById("login_modal").close()}
           >
-            ✕
+            <i class="fa-solid fa-xmark fa-xl text-theme"></i>
           </button>
 
           {/* Email */}
@@ -108,6 +137,7 @@ export default function LoginModal() {
                   ? "input-error"
                   : ""
                 }`}
+                autoComplete="email"
             />
           </fieldset>
 

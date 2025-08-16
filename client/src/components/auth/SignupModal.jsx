@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { auth } from "../../utils/firebase.js";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { ThemeContext } from "../../context/ThemeContext.jsx";
+import LoadingDark from "../../assets/animations/LoadingDark.json"
+import LoadingLight from "../../assets/animations/LoadingLight.json"
+import Lottie from "lottie-react";
 import Notiflix from "notiflix";
 
 export default function SignupModal() {
@@ -11,6 +15,9 @@ export default function SignupModal() {
   const [emailStatus, setEmailStatus] = useState("");
   const [passwordStatus, setPasswordStatus] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { mode } = useContext(ThemeContext);
+  const loadinganimationData = mode === "dark" ? LoadingDark : LoadingLight;
 
   const checkName = (e) => {
     const val = e.target.value;
@@ -56,28 +63,42 @@ export default function SignupModal() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      setLoading(true);
       // Update display name
       await updateProfile(userCred.user, { displayName: name });
       console.log("User registered:", userCred.user);
       localStorage.setItem("token", userCred.user.accessToken)
-      document.getElementById("signup_modal").close();
-      Notiflix.Notify.success(`Welcome ${userCred.user.displayName}! Redirecting.....`)
-      setTimeout(()=>{
+      localStorage.setItem("name", userCred.user.displayName)
+      localStorage.setItem("showAuthSuccess", userCred.user.displayName)
+      setTimeout(() => {
+        document.getElementById("signup_modal").close();
         window.location.reload();
-      },2000)
+      }, 2000)
     } catch (error) {
+      setLoading(false);
       console.error("Signup error:", error);
       Notiflix.Notify.failure(error.message);
     }
     clearForm();
-    setLoading(false);
   };
 
   return (
     <dialog id="signup_modal" className="modal">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-center items-center">
+          {/* Semi-transparent overlay without solid color */}
+          <div className="absolute inset-0 bg-white/20 backdrop-blur-[3px]"></div>
+
+          {/* Spinner and text */}
+          <div className="relative flex flex-col justify-center items-center">
+            <div className="w-150 h-100 flex justify-center items-center">
+              <Lottie animationData={loadinganimationData} loop />
+            </div>
+          </div>
+        </div>
+      )}
       <div className="modal-box bg-indigo-200 dark:bg-base-100">
         <form onSubmit={handleSignup} className="space-y-4">
           <h3 className="font-bold text-lg">Sign Up</h3>
@@ -86,7 +107,7 @@ export default function SignupModal() {
             type="button"
             onClick={() => document.getElementById("signup_modal").close()}
           >
-            ✕
+            <i class="fa-solid fa-xmark fa-xl text-theme"></i>
           </button>
 
           {/* Name */}
@@ -97,12 +118,13 @@ export default function SignupModal() {
               placeholder="Enter your name"
               value={name}
               className={`input w-full ${nameStatus === "success"
-                  ? "input-success"
-                  : nameStatus === "error"
-                    ? "input-error"
-                    : ""
+                ? "input-success"
+                : nameStatus === "error"
+                  ? "input-error"
+                  : ""
                 }`}
               onChange={checkName}
+              autoComplete="name"
             />
           </fieldset>
 
@@ -114,12 +136,13 @@ export default function SignupModal() {
               placeholder="Enter your email"
               value={email}
               className={`input w-full ${emailStatus === "success"
-                  ? "input-success"
-                  : emailStatus === "error"
-                    ? "input-error"
-                    : ""
+                ? "input-success"
+                : emailStatus === "error"
+                  ? "input-error"
+                  : ""
                 }`}
               onChange={checkEmail}
+              autoComplete="email"
             />
           </fieldset>
 
@@ -131,10 +154,10 @@ export default function SignupModal() {
               placeholder="Enter your password"
               value={password}
               className={`input w-full ${passwordStatus === "success"
-                  ? "input-success"
-                  : passwordStatus === "error"
-                    ? "input-error"
-                    : ""
+                ? "input-success"
+                : passwordStatus === "error"
+                  ? "input-error"
+                  : ""
                 }`}
               onChange={checkPassword}
             />

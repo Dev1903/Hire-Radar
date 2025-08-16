@@ -42,7 +42,7 @@ export default function ForgotPasswordModal() {
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={() => document.getElementById("forgot_password_modal").close()}
           >
-            ✕
+            <i class="fa-solid fa-xmark fa-xl text-theme"></i>
           </button>
 
           {/* Email */}
@@ -60,6 +60,7 @@ export default function ForgotPasswordModal() {
                   : ""
               }`}
               onChange={checkEmail}
+              autoComplete="email"
             />
           </fieldset>
 

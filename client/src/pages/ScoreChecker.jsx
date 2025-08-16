@@ -1,9 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Header from "../components/Header";
+import { ThemeContext } from "../context/ThemeContext";
 import LoginModal from "../components/auth/LoginModal";
 import SignupModal from "../components/auth/SignupModal";
 import ForgotPasswordModal from "../components/auth/ForgotPasswordModal";
 import Notiflix from "notiflix"
+import { uploadResume } from "../api/uploadResume";
+import ReviewModal from "../components/ReviewModal";
+import LoadingDark from "../assets/animations/LoadingDark.json"
+import LoadingLight from "../assets/animations/LoadingLight.json"
+import Lottie from "lottie-react";
 
 export default function ScoreChecker() {
   const [result, setResult] = useState(null);
@@ -12,6 +18,9 @@ export default function ScoreChecker() {
   const [dragging, setDragging] = useState(false);
   const fileInputRef = useRef();
 
+
+  const { mode } = useContext(ThemeContext);
+  const loadinganimationData = mode === "dark" ? LoadingDark : LoadingLight;
   function formatValue(value, maxValue) {
     const formatted = value % 1 === 0 ? value.toString() : value.toFixed(2);
     return `${formatted}/${maxValue}`;
@@ -20,7 +29,11 @@ export default function ScoreChecker() {
   const handleFile = async (file) => {
     if (!localStorage.getItem("token")) {
       Notiflix.Notify.warning("Kindly Login to Continue !")
-      document.getElementById("login_modal").showModal();
+      setTimeout(() => {
+        localStorage.setItem("showLoginArrow", "true");
+        window.dispatchEvent(new Event("storage")); // trigger update for Header
+      }, 2500);
+      // document.getElementById("login_modal").showModal();
     }
     else {
       if (!file || file.type !== "application/pdf") {
@@ -35,13 +48,12 @@ export default function ScoreChecker() {
       formData.append("model", "2");
 
       try {
-        const res = await fetch("http://localhost:5000/upload_resume", {
-          method: "POST",
-          body: formData,
-        });
+        const res = await uploadResume(formData);
         Notiflix.Notify.success("Your ATS Score is Generated")
+        const data = res.data
+        console.log(data)
         
-        const data = await res.json();
+        // const data = await res.data();
         setResult(data || []);
 
         const initialScores = {};
@@ -59,6 +71,7 @@ export default function ScoreChecker() {
         Notiflix.Notify.failure("Upload Failed! Please Try Again Later")
       } finally {
         setLoading(false);
+        setTimeout(()=>document.getElementById("review_modal").showModal(), 4000);
       }
     }
   };
@@ -119,6 +132,7 @@ export default function ScoreChecker() {
       <LoginModal />
       <SignupModal />
       <ForgotPasswordModal />
+      <ReviewModal />
       {/* HEADER */}
       <div className="header">
         <Header />
@@ -148,7 +162,7 @@ export default function ScoreChecker() {
           }}
         >
           <div
-            className={`flex justify-center items-center border-2 border-dashed border-indigo-500 dark:border-yellow-500 rounded-xl p-10 h-50 w-100 text-center cursor-pointer transition-colors ${dragging ? "border-blue-500 bg-blue-50" : "border-gray-400"
+            className={` mx-5 flex justify-center items-center border-2 border-dashed border-indigo-500 dark:border-yellow-500 rounded-xl p-10 h-50 w-100 text-center cursor-pointer transition-colors ${dragging ? "border-blue-500 bg-blue-50" : "border-gray-400"
               }`}
             onClick={() => fileInputRef.current.click()}
             onDrop={handleDrop}
@@ -171,7 +185,19 @@ export default function ScoreChecker() {
           </div>
         </div>
       )}
+{loading && (
+          <div className="fixed inset-0 z-50 flex flex-col justify-center items-center">
+            {/* Semi-transparent overlay without solid color */}
+            <div className="absolute inset-0 bg-white/20 backdrop-blur-[3px]"></div>
 
+            {/* Spinner and text */}
+            <div className="relative flex flex-col justify-center items-center">
+              <div className="w-150 h-100 flex justify-center items-center">
+                <Lottie animationData={loadinganimationData} loop />
+              </div>
+            </div>
+          </div>
+        )}
       {/* RESULTS AFTER UPLOAD */}
       {result && (
         <div className="rounded-lg p-5 h-auto md:h-[80vh] grid grid-cols-1 md:grid-cols-2 gap-6">

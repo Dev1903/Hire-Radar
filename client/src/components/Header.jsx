@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ThemeToggle from '../utils/DarkModeToggleButton';
 import Notiflix from 'notiflix';
@@ -6,10 +6,20 @@ import Notiflix from 'notiflix';
 
 const Header = () => {
     const [isChecked, setIsChecked] = useState(false);
+    const [showArrow, setShowArrow] = useState(localStorage.getItem("showLoginArrow") === "true");
 
     const handleCheckboxChange = (e) => {
         setIsChecked(e.target.checked);
     };
+
+    useEffect(() => {
+        const updateArrow = () => {
+            setShowArrow(localStorage.getItem("showLoginArrow") === "true");
+        };
+        window.addEventListener("storage", updateArrow);
+        return () => window.removeEventListener("storage", updateArrow);
+    }, []);
+
 
     return (
         <div>
@@ -53,7 +63,7 @@ const Header = () => {
                             </ul>
                         )}
                     </div>
-                    <Link to="/" className="text-xl text-glow">Hire Radar</Link>
+                    <Link to="/" className="text-xl text-glow">HireRadar</Link>
                 </div>
 
                 {/* Computer View Menu */}
@@ -88,13 +98,26 @@ const Header = () => {
                                 tabIndex={0}
                                 role="button"
                                 className="btn btn-ghost h-12 w-12 rounded-full overflow-hidden p-0 border-indigo-500 dark:border-yellow-500 border-2 text-glow"
+                                onClick={() => {
+                                        // Hide the arrow when profile is clicked
+                                        setShowArrow(false);
+                                        localStorage.removeItem("showLoginArrow");
+                                    }}
                             >
                                 <img
                                     src={localStorage.getItem("dp") ? localStorage.getItem("dp") : "/profile.png"}
                                     alt="Profile"
                                     className="h-full w-full object-cover"
+                                    
                                 />
+                                {showArrow && (
+                                    <i
+                                        className=" pt-5 fa-solid fa-angle-up fa-xl animate-bounce size-6 text-theme absolute -bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer"
+                                    ></i>
+                                )}
+
                             </div>
+
                             {
                                 localStorage.getItem("token") ? (
                                     <ul
@@ -124,11 +147,14 @@ const Header = () => {
                                         tabIndex={0}
                                         className="menu dropdown-content bg-white dark:bg-base-100 rounded-box z-1 mt-3 w-max p-2 shadow absolute right-0 text-md"
                                     >
+
                                         <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
                                             <a
                                                 className="justify-end"
-                                                onClick={() =>
+                                                onClick={() =>{
+                                                    localStorage.removeItem("showLoginArrow")
                                                     document.getElementById("login_modal").showModal()
+                                                }
                                                 }
                                             >
                                                 Login
@@ -137,8 +163,10 @@ const Header = () => {
                                         <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
                                             <a
                                                 className="justify-end"
-                                                onClick={() =>
+                                                onClick={() =>{
+                                                    localStorage.removeItem("showLoginArrow")
                                                     document.getElementById("signup_modal").showModal()
+                                                }
                                                 }
                                             >
                                                 SignUp

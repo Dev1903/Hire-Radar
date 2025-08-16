@@ -3,6 +3,7 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 
 const ReviewCard = ({ username, image, review, rating }) => {
+     console.log(image)
     return (
         <div className="card sm:w-96 dark:bg-base-100 card-md rounded-3xl mb-10 mt-1">
             <div className="card-body">
@@ -19,7 +20,7 @@ const ReviewCard = ({ username, image, review, rating }) => {
                         <Rating
                             name="custom-star"
                             value={rating}
-                            precision={0.5}
+                            precision={0.1}
                             readOnly
                             icon={<i className="fas fa-star text-theme"></i>}
                             emptyIcon={<i className="far fa-star text-gray-500"></i>}

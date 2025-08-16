@@ -17,6 +17,9 @@ import SignupModal from "../components/auth/SignupModal";
 import ForgotPasswordModal from "../components/auth/ForgotPasswordModal";
 import Notiflix from "notiflix";
 
+import { generateResume } from "../api/generateResume";
+import ReviewModal from "../components/ReviewModal";
+
 const sectionTemplates = [
   { id: "Career Objective", label: "Career Objective", type: "career", active: true, content: "" },
   { id: "Education", label: "Education", type: "education", active: true, content: "" },
@@ -54,10 +57,15 @@ export default function ResumeGenerator() {
   }
   const shown = useRef(false);
   useEffect(() => {
-    if (!shown.current) {
+    if (!shown.current && !localStorage.getItem("token")) {
       Notiflix.Notify.info("Kindly Login Beforehand to avoid rewriting");
       shown.current = true;
-    }
+    
+    setTimeout(() => {
+      localStorage.setItem("showLoginArrow", "true");
+      window.dispatchEvent(new Event("storage")); // trigger update for Header
+    }, 2500);
+  }
   }, []);
 
   const activeSections = sections.filter(s => s.active);
@@ -97,35 +105,38 @@ export default function ResumeGenerator() {
 
         // POST request to backend
         console.log(payload)
-        const response = await fetch("http://localhost:5000/generate_resume", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        })
-        if (!response.ok) {
-          Notiflix.Notify.failure("Failed to Generate Resume !")
-        }
-        Notiflix.Notify.success("Resume Generated Successfully !")
-        // Get the PDF as a blob
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
 
-        // Trigger download
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "generated_resume.pdf";
-        a.click();
-        window.URL.revokeObjectURL(url);
-        setFormData(
-          {
-            full_name: "",
-            email: "",
-            phone: "",
-            linkedin: "",
-            github: ""
-          }
-        )
-        setSections(sectionTemplates)
+        const saveBlobAsFile = (blob, filename = "HireRadar_resume.pdf") => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        };
+
+        // Get the PDF as a blob
+        try {
+          const blob = await generateResume(payload);
+          saveBlobAsFile(blob);
+          Notiflix.Notify.success("Resume Generated Successfully !")
+          setTimeout(()=>document.getElementById("review_modal").showModal(), 500);
+          setFormData(
+            {
+              full_name: "",
+              email: "",
+              phone: "",
+              linkedin: "",
+              github: ""
+            }
+          )
+          setSections(sectionTemplates)
+        }
+        catch (err) {
+          Notiflix.Notify.failure("Unable to generate Resume! Please try again later")
+        }
 
       } catch (err) {
         console.error(err);
@@ -140,13 +151,14 @@ export default function ResumeGenerator() {
       <LoginModal />
       <SignupModal />
       <ForgotPasswordModal />
+      <ReviewModal />
       <div className="header">
         <Header />
       </div>
       <div className="min-h-screen flex gap-6 p-6">
         {/* Left form scrollable */}
         <form className="w-1/2 overflow-y-auto max-h-screen space-y-6">
-          <h1 className="text-3xl font-bold text-glow">Resume Generator</h1>
+          <h1 className="text-3xl font-bold text-glow ms-4">Resume Generator</h1>
           <div className="p-4 rounded-lg shadow-lg space-y-3 ">
             {["full_name", "email", "phone", "linkedin", "github"].map(field => (
               <input

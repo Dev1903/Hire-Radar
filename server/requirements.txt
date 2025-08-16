@@ -1,6 +1,7 @@
 # Server Env
 flask
 flask-cors
+python-dotenv
 
 # Job Search
 PyMuPDF

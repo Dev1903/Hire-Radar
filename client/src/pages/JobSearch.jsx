@@ -11,7 +11,9 @@ import { Link } from "react-router-dom";
 import LoginModal from "../components/auth/LoginModal";
 import SignupModal from "../components/auth/SignupModal"
 import ForgotPasswordModal from "../components/auth/ForgotPasswordModal"
+import ReviewModal from "../components/ReviewModal"
 import Notiflix from "notiflix";
+import { uploadResume } from "../api/uploadResume";
 
 export default function JobSearch() {
   const [jobs, setJobs] = useState([]);
@@ -36,55 +38,57 @@ export default function JobSearch() {
 
   // Upload Resume
   const handleUpload = async (uploadedFile) => {
-    if(!localStorage.getItem("token")){
+    if (!localStorage.getItem("token")) {
       Notiflix.Notify.warning("Kindly Login to Continue !")
-      document.getElementById("login_modal").showModal();
+      setTimeout(() => {
+        localStorage.setItem("showLoginArrow", "true");
+        window.dispatchEvent(new Event("storage")); // trigger update for Header
+      }, 2500);
+      // document.getElementById("login_modal").showModal();
     }
-    else{
-    const selectedFile = uploadedFile;
-    if (!selectedFile) return Notiflix.Notify.warning("Please upload a PDF to continue")
+    else {
+      const selectedFile = uploadedFile;
+      if (!selectedFile) return Notiflix.Notify.warning("Please upload a PDF to continue")
 
-    setLoading(true);
+      setLoading(true);
 
-    const formData = new FormData();
-    formData.append("resume", selectedFile);
-    formData.append("page", 1);
-    formData.append("model", "1");
-    try {
-      const res = await fetch("http://localhost:5000/upload_resume", {
-        method: "POST",
-        body: formData,
-      });
+      const formData = new FormData();
+      formData.append("resume", selectedFile);
+      formData.append("page", 1);
+      formData.append("model", "1");
+      try {
+        const res = await uploadResume(formData);
 
-      const data = await res.json();
-      Notiflix.Notify.success(`Found ${data.total_jobs} jobs as per your resume`)
-      setStatus(res.status);
+        setStatus(res.status);
+        console.log(res.status);
+        const data = res.data;
+        console.log(data);
+        Notiflix.Notify.success(`Found ${data.total_jobs} jobs as per your resume`)
 
-      console.log(data);
+        setJobs(data.jobs || []);
+        setAllSkills(data.skills || []);
+        setFilteredJobs(data.jobs || []);
+        setSelectedLocation("");
+        setSelectedSkills([]);
+        setPage(1);
 
-      setJobs(data.jobs || []);
-      setAllSkills(data.skills || []);
-      setFilteredJobs(data.jobs || []);
-      setSelectedLocation("");
-      setSelectedSkills([]);
-      setPage(1);
-
-      // Extract unique locations from all jobs
-      const locations = [
-        ...new Set(
-          (data.jobs || [])
-            .map((job) => job.location)
-            .filter(Boolean)
-        ),
-      ].sort();
-      setAvailableLocations(locations);
-    } catch (err) {
-      console.log(err)
-      Notiflix.Notify.failure("Error finding jobs! Please try again later")
-    } finally {
-      setLoading(false);
+        // Extract unique locations from all jobs
+        const locations = [
+          ...new Set(
+            (data.jobs || [])
+              .map((job) => job.location)
+              .filter(Boolean)
+          ),
+        ].sort();
+        setAvailableLocations(locations);
+      } catch (err) {
+        console.log(err)
+        Notiflix.Notify.failure("Error finding jobs! Please try again later")
+      } finally {
+        setLoading(false);
+        setTimeout(()=>document.getElementById("review_modal").showModal(), 5000);
+      }
     }
-  }
 
   };
 
@@ -171,9 +175,10 @@ export default function JobSearch() {
 
   return (
     <div className="min-h-screen pb-4">
-    <LoginModal />
-    <SignupModal />
-    <ForgotPasswordModal />
+      <LoginModal />
+      <SignupModal />
+      <ForgotPasswordModal />
+      <ReviewModal />
       <div className="header">
         <Header />
       </div>
@@ -273,18 +278,18 @@ export default function JobSearch() {
             {/* Spinner and text */}
             <div className="relative flex flex-col justify-center items-center">
               <div className="w-150 h-100 flex justify-center items-center">
-              <Lottie animationData={loadinganimationData} loop />
-            </div>
+                <Lottie animationData={loadinganimationData} loop />
+              </div>
             </div>
           </div>
         )}
         {/* Jobs List / No jobs animation */}
         {status == 200 && jobs.length === 0 ? (
           <div className="flex flex-col items-center justify-center w-full">
-            <div className="w-100 h-100 flex justify-center items-center">
+            <div className="w-100 h-80 flex justify-center items-center">
               <Lottie animationData={notfoundanimationData} loop />
             </div>
-            <p className="text-center text-gray-500 dark:text-gray-400 text-lg mt-6 px-4">
+            <p className="text-center text-gray-500 dark:text-gray-400 text-lg mt-4 px-4">
               <i className="fas fa-upload mr-2"></i> No jobs found. Try adding
               more skills or an ATS-friendly resume.
             </p>

@@ -1,3 +1,5 @@
+import re
+import math
 import os
 import re
 import fitz  # PyMuPDF
@@ -5,6 +7,10 @@ import docx2txt
 import requests
 import nltk
 from nltk.tokenize import word_tokenize
+from dotenv import load_dotenv
+
+# Load variables from .env
+load_dotenv()
 
 nltk.download('punkt')
 
@@ -19,9 +25,8 @@ def fetch_jobs_from_adzuna(skills_list, max_results_per_skill=50):
     Fetch ALL jobs from Adzuna API for all skills and merge duplicates.
     No location filtering; frontend will handle filtering.
     """
-    import math
-    app_id = "99f8c648"
-    app_key = "95ac41142e058a74d733548e95afbd10"
+    app_id = os.getenv("APP_ID")
+    app_key = os.getenv("API_KEY")
     headers = {"Accept": "application/json"}
     all_jobs_dict = {}  # keyed by redirect_url to remove duplicates
 
@@ -93,18 +98,15 @@ def process_resume_file(file_storage):
     if filename.endswith(".pdf"):
         pdf_bytes = file_storage.read()
         file_storage.seek(0)
-        import fitz
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         text = ""
         for page in doc:
             text += page.get_text()
         resume_text = text.lower()
     elif filename.endswith(".docx"):
-        import docx2txt
         temp_path = "temp_resume.docx"
         file_storage.save(temp_path)
         resume_text = docx2txt.process(temp_path).lower()
-        import os
         os.remove(temp_path)
     else:
         return {"skills": [], "experience": 0, "jobs": [], "total_jobs": 0}
@@ -118,7 +120,6 @@ def process_resume_file(file_storage):
     found_skills = [skill for skill in POSSIBLE_SKILLS if skill in resume_text]
 
     # Extract experience
-    import re
     exp_match = re.search(r'(\d+)\s*(?:\+)?\s*(?:years|yrs|year)', resume_text)
     experience = int(exp_match.group(1)) if exp_match else 0
 
