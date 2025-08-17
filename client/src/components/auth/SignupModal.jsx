@@ -72,6 +72,7 @@ export default function SignupModal() {
       localStorage.setItem("token", userCred.user.accessToken)
       localStorage.setItem("name", userCred.user.displayName)
       localStorage.setItem("showAuthSuccess", userCred.user.displayName)
+      localStorage.removeItem("showLoginArrow")
       setTimeout(() => {
         document.getElementById("signup_modal").close();
         window.location.reload();

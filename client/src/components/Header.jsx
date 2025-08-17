@@ -131,6 +131,7 @@ const Header = () => {
                                                 onClick={() => {
                                                     localStorage.removeItem("dp");
                                                     localStorage.removeItem("token");
+                                                    localStorage.removeItem("showLoginArrow")
                                                     Notiflix.Notify.success("Successfully Logged Out! Redirecting.....")
                                                     setTimeout(() => {
                                                         window.location.reload();

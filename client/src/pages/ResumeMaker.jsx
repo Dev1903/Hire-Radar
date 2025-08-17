@@ -92,6 +92,16 @@ export default function ResumeGenerator() {
   if (currentContent.length) pages.push(currentContent);
 
   const handleGenerateResume = async () => {
+    const requiredFields = ["full_name", "email", "phone", "linkedin", "github"];
+    const emptyField = requiredFields.find(field => !formData[field].trim());
+
+    if (emptyField) {
+      Notiflix.Notify.failure(
+        `Please fill in your ${emptyField.replace("_", " ").replace(/\b\w/g, c => c.toUpperCase())} before generating the resume.`
+      );
+      return;
+    }
+
     if (!localStorage.getItem("token")) {
       Notiflix.Notify.warning("Kindly Login to Continue!");
       document.getElementById("login_modal").showModal();
@@ -227,6 +237,7 @@ export default function ResumeGenerator() {
                 value={formData[field]}
                 onChange={handleChange}
                 className="input w-full"
+                required
               />
             ))}
           </div>

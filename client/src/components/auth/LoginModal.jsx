@@ -55,6 +55,7 @@ export default function LoginModal() {
     localStorage.setItem("token", userCred.user.accessToken);
     localStorage.setItem("name", userCred.user.displayName);
     localStorage.setItem("showAuthSuccess", userCred.user.displayName);
+    localStorage.removeItem("showLoginArrow")
 
     // Keep loading active until modal closes and page reloads
     setTimeout(() => {
@@ -84,6 +85,7 @@ export default function LoginModal() {
       localStorage.setItem("token", result.user.accessToken);
       localStorage.setItem("name", result.user.displayName);
       localStorage.setItem("showAuthSuccess", result.user.displayName);
+      localStorage.removeItem("showLoginArrow")
       localStorage.setItem("dp", result.user.photoURL);
       
       setTimeout(() => {
