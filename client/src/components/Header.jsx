@@ -27,7 +27,7 @@ const Header = () => {
                 <div className="navbar-start">
                     <div className="dropdown">
 
-                        <label className="btn btn-circle swap swap-rotate lg:hidden me-3" role="button">
+                        <label className="btn btn-circle custom-btn swap swap-rotate lg:hidden me-3" role="button">
                             {/* checkbox controls the state */}
                             <input
                                 type="checkbox"
@@ -48,7 +48,7 @@ const Header = () => {
 
                         {/* Mobile View Menu (only visible when checked) */}
                         {isChecked && (
-                            <ul className="menu menu-sm dropdown-content bg-white dark:bg-base-300 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                            <ul className="menu menu-sm dropdown-content custom-bg rounded-box z-1 mt-3 w-52 p-2 shadow">
                                 <li className='py-1'><Link to="/">Home</Link></li>
                                 <li className='py-1'><a>About</a></li>
                                 <li className='py-1'>
@@ -74,7 +74,7 @@ const Header = () => {
                         <li>
                             <details>
                                 <summary>ATS</summary>
-                                <ul className="p-2 w-max z-100 shadow-xl bg-white dark:bg-base-300">
+                                <ul className="p-2 w-max z-100 shadow-xl custom-bg">
                                     <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'><Link to="/score-check">ATS Score Checker</Link></li>
                                     <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'><Link to="/resume-maker">ATS Resume Maker</Link></li>
                                     <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'><Link to="/job-search">Resume Based Job Search</Link></li>
@@ -99,16 +99,16 @@ const Header = () => {
                                 role="button"
                                 className="btn btn-ghost h-12 w-12 rounded-full overflow-hidden p-0 border-indigo-500 dark:border-yellow-500 border-2 text-glow"
                                 onClick={() => {
-                                        // Hide the arrow when profile is clicked
-                                        setShowArrow(false);
-                                        localStorage.removeItem("showLoginArrow");
-                                    }}
+                                    // Hide the arrow when profile is clicked
+                                    setShowArrow(false);
+                                    localStorage.removeItem("showLoginArrow");
+                                }}
                             >
                                 <img
                                     src={localStorage.getItem("dp") ? localStorage.getItem("dp") : "/profile.png"}
                                     alt="Profile"
                                     className="h-full w-full object-cover"
-                                    
+
                                 />
                                 {showArrow && (
                                     <i
@@ -145,13 +145,13 @@ const Header = () => {
                                 ) : (
                                     <ul
                                         tabIndex={0}
-                                        className="menu dropdown-content bg-white dark:bg-base-100 rounded-box z-1 mt-3 w-max p-2 shadow absolute right-0 text-md"
+                                        className="menu dropdown-content custom-bg rounded-box z-1 mt-3 w-max p-2 shadow absolute right-0 text-md"
                                     >
 
                                         <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
                                             <a
                                                 className="justify-end"
-                                                onClick={() =>{
+                                                onClick={() => {
                                                     localStorage.removeItem("showLoginArrow")
                                                     document.getElementById("login_modal").showModal()
                                                 }
@@ -163,7 +163,7 @@ const Header = () => {
                                         <li className='dark:hover:backdrop-brightness-100 hover:backdrop-brightness-85 rounded-2xl'>
                                             <a
                                                 className="justify-end"
-                                                onClick={() =>{
+                                                onClick={() => {
                                                     localStorage.removeItem("showLoginArrow")
                                                     document.getElementById("signup_modal").showModal()
                                                 }

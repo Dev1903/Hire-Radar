@@ -8,7 +8,6 @@ export default function PreviewPDF({ sections, formData }) {
   const containerRef = useRef();
   const sectionRefs = useRef([]);
 
-
   const [scale, setScale] = useState(1);
   const [pages, setPages] = useState([]);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -19,6 +18,7 @@ export default function PreviewPDF({ sections, formData }) {
       sec.content &&
       (Array.isArray(sec.content) ? sec.content.length > 0 : sec.content.trim() !== "")
   );
+
   useEffect(() => {
     sectionRefs.current = [];
   }, [activeSections]);
@@ -29,13 +29,21 @@ export default function PreviewPDF({ sections, formData }) {
     }
   };
 
-  // Scale to fit container width
+  // Scale to fit container width (desktop only)
   useEffect(() => {
     const handleResize = () => {
       if (!containerRef.current) return;
+
       const containerWidth = containerRef.current.clientWidth;
-      setScale(containerWidth / (A4_WIDTH_MM * MM_TO_PX));
+      const isMobile = containerWidth < 768;
+
+      if (isMobile) {
+        setScale(1); // No scaling on mobile
+      } else {
+        setScale(containerWidth / (A4_WIDTH_MM * MM_TO_PX));
+      }
     };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -75,11 +83,7 @@ export default function PreviewPDF({ sections, formData }) {
     pushPage();
     setPages(newPages.length ? newPages : [[]]);
     setCurrentPageIndex(0);
-  }, [
-    JSON.stringify(activeSections),
-    JSON.stringify(formData)
-  ]);
-
+  }, [JSON.stringify(activeSections), JSON.stringify(formData)]);
 
   const scrollToPage = (index) => {
     if (!containerRef.current) return;
@@ -89,10 +93,10 @@ export default function PreviewPDF({ sections, formData }) {
   };
 
   return (
-    <div className="flex flex-col h-full border">
+    <div className="flex flex-col h-full border w-full">
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden p-4 bg-gray-100"
+        className="flex-1 overflow-y-auto overflow-x-hidden p-4 bg-gray-100 dark:bg-gray-900"
         style={{ scrollSnapType: "y mandatory" }}
       >
         {pages.map((page, idx) => (
@@ -100,9 +104,10 @@ export default function PreviewPDF({ sections, formData }) {
             key={idx}
             className="mx-auto bg-gray-100 dark:bg-white shadow-lg mb-4"
             style={{
-              width: `${A4_WIDTH_MM * MM_TO_PX}px`,
+              width: `100%`,
+              maxWidth: `${A4_WIDTH_MM * MM_TO_PX}px`,
               minHeight: `${A4_HEIGHT_MM * MM_TO_PX}px`,
-              transform: `scale(${scale})`,
+              transform: scale !== 1 ? `scale(${scale})` : "none",
               transformOrigin: "top left",
               padding: "24px",
               scrollSnapAlign: "start",
@@ -111,11 +116,13 @@ export default function PreviewPDF({ sections, formData }) {
             {/* Always show personal info */}
             {idx === 0 && (
               <div className="text-center mb-6 personal-info">
-                <h1 className="text-xl text-black font-bold break-words">{formData.full_name || ""}</h1>
-                <p className="text-neutral-600 break-words">
+                <h1 className="text-xl text-black dark:text-black font-bold break-words">
+                  {formData.full_name || ""}
+                </h1>
+                <p className="text-neutral-600 dark:text-neutral-600 break-words">
                   {formData.email || ""} | {formData.phone || ""}
                 </p>
-                <p className="text-neutral-600 underline break-words">
+                <p className="text-neutral-600 dark:text-neutral-600 underline break-words">
                   {formData.linkedin || ""} | {formData.github || ""}
                 </p>
               </div>
@@ -137,16 +144,17 @@ export default function PreviewPDF({ sections, formData }) {
                     </div>
                   ))
                 ) : (
-                  <p className="whitespace-pre-wrap break-words text-sm text-black">{sec.content}</p>
+                  <p className="whitespace-pre-wrap break-words text-sm text-black dark:text-black">{sec.content}</p>
                 )}
               </div>
             ))}
           </div>
         ))}
       </div>
+
       {/* PAGINATION */}
       {pages.length > 1 && (
-        <div className="flex justify-center items-center gap-2 p-2 bg-gray-200">
+        <div className="flex justify-center items-center gap-2 p-2 bg-gray-200 dark:bg-gray-800">
           <button
             className="btn btn-outline btn-sm"
             onClick={() => scrollToPage(Math.max(currentPageIndex - 1, 0))}

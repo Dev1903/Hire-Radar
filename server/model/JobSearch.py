@@ -27,6 +27,7 @@ def fetch_jobs_from_adzuna(skills_list, max_results_per_skill=50):
     """
     app_id = os.getenv("APP_ID")
     app_key = os.getenv("API_KEY")
+    print(app_id)
     headers = {"Accept": "application/json"}
     all_jobs_dict = {}  # keyed by redirect_url to remove duplicates
 

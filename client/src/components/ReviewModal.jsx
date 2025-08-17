@@ -8,14 +8,12 @@ import Rating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
 
 export default function ReviewModal() {
-    const [name, setName] = useState("");
     const [rating, setRating] = useState(5.0); // decimal support
     const [hover, setHover] = useState(-1); // for hover label
     const [review, setReview] = useState("");
     const [loading, setLoading] = useState(false);
 
     const clearForm = () => {
-        setName("");
         setRating(5.0);
         setHover(-1);
         setReview("");
@@ -47,7 +45,7 @@ export default function ReviewModal() {
 
     return (
         <dialog id="review_modal" className="modal">
-            <div className="modal-box bg-indigo-200 dark:bg-base-100">
+            <div className="modal-box custom-bg">
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <h3 className="font-bold text-lg">Leave a Review</h3>
                     <button
@@ -60,14 +58,14 @@ export default function ReviewModal() {
 
 
                     {/* Rating (MUI Stars) */}
-                    <fieldset className="fieldset border border-base-300 p-4 rounded-box">
+                    <fieldset className="fieldset border border-indigo-800 dark:border-yellow-500 p-4 rounded-box">
                         <legend className="fieldset-legend text-sm text-theme">Rating</legend>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                             <Rating
                                 name="hover-feedback"
                                 value={rating}
                                 precision={0.1}
-                                icon={<i className="fas fa-star text-yellow-500 text-xl" />} // filled star
+                                icon={<i className="fas fa-star text-theme text-xl" />} // filled star
                                 emptyIcon={<i className="fas fa-star text-gray-400 text-xl" />} // empty star
                                 getLabelText={(value) =>
                                     `${value.toFixed(1)} Star${value !== 1 ? "s" : ""}`
@@ -95,7 +93,7 @@ export default function ReviewModal() {
                     </fieldset>
 
                     {/* Review Text */}
-                    <fieldset className="fieldset border border-base-300 p-4 rounded-box">
+                    <fieldset className="fieldset border border-indigo-800 dark:border-yellow-500 p-4 rounded-box">
                         <legend className="fieldset-legend text-sm text-theme">Review</legend>
                         <textarea
                             placeholder="Write your review..."

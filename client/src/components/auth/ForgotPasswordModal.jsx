@@ -34,7 +34,7 @@ export default function ForgotPasswordModal() {
 
   return (
     <dialog id="forgot_password_modal" className="modal">
-      <div className="modal-box bg-indigo-200 dark:bg-base-100">
+      <div className="modal-box custom-bg">
         <form onSubmit={handleReset} className="space-y-4">
           <h3 className="font-bold text-lg">Reset Password</h3>
           <button
@@ -46,7 +46,7 @@ export default function ForgotPasswordModal() {
           </button>
 
           {/* Email */}
-          <fieldset className="fieldset border border-base-300 p-4 rounded-box">
+          <fieldset className="fieldset border border-indigo-800 dark:border-yellow-500 p-4 rounded-box">
             <legend className="fieldset-legend text-sm text-theme">Email</legend>
             <input
               type="email"

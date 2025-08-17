@@ -112,7 +112,7 @@ export default function LoginModal() {
             </div>
           </div>
         )}
-      <div className="modal-box bg-indigo-200 dark:bg-base-100">
+      <div className="modal-box custom-bg">
         <form onSubmit={handleLogin} className="space-y-4">
           <h3 className="font-bold text-lg">Login</h3>
           <button
@@ -124,7 +124,7 @@ export default function LoginModal() {
           </button>
 
           {/* Email */}
-          <fieldset className="fieldset border border-base-300 p-4 rounded-box">
+          <fieldset className="fieldset border border-indigo-800 dark:border-yellow-500 p-4 rounded-box">
             <legend className="fieldset-legend text-sm text-theme">Email</legend>
             <input
               type="email"
@@ -142,7 +142,7 @@ export default function LoginModal() {
           </fieldset>
 
           {/* Password */}
-          <fieldset className="fieldset border border-base-300 p-4  mb-0 rounded-box">
+          <fieldset className="fieldset border border-indigo-800 dark:border-yellow-500 p-4  mb-0 rounded-box">
             <legend className="fieldset-legend text-sm text-theme">Password</legend>
             <input
               type="password"
