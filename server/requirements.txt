@@ -13,10 +13,8 @@ pandas
 
 # ATS Score Check
 PyPDF2
-spacy==3.6.0
+spacy
 nltk
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.6.0/en_core_web_sm-3.6.0-py3-none-any.whl
-
 
 # Resume Maker
 google-generativeai
