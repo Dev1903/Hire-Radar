@@ -5,7 +5,7 @@ const URL = import.meta.env.VITE_APP_BACKEND_URL;
 export const generateResume = async (payload) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/generate_resume",
+      `${URL}/generate_resume`,
       payload,
       { responseType: "blob" } // important to get Blob directly
     );
