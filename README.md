@@ -1,0 +1,102 @@
+# Hire-Radar
+
+A comprehensive platform aiming to streamline job-hiring processes, bringing candidates in an efficient, user-friendly web application.
+
+---
+
+## Features
+- Candidate registration  
+- Job search & filter functionality for candidates   
+- Responsive UI supporting multiple device form-factors  
+- Secure authentication & authorization
+- RESTful backend API and decoupled frontend architecture  
+
+---
+
+## Demo / Live Link
+Visit the live deployment here: [Hire-Radar Live](https://hire-radar.vercel.app)
+
+<img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%231.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%232.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%233.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%234.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%235.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%236.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%237.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%238.jpg" alt="Homepage Screenshot" width="200"/>
+
+---
+
+## Tech Stack
+- **Frontend**: JavaScript, React  
+- **Backend**: Python (Flask/Django)
+- **Database**: Firebase  
+- **Styling**: CSS, TailWind CSS, Daisy UI  
+- **Authentication**: Firebase Auth  
+- **Hosting/Deployment**: Vercel (frontend)  
+
+---
+
+## Installation & Setup
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/Dev1903/Hire-Radar.git
+cd Hire-Radar
+```
+
+---
+
+## FrontEnd Setup
+```bash
+cd client
+npm install
+npm run dev
+```
+
+---
+
+## Backend Setup
+```bash
+cd ../server
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the backend server
+python app.py
+```
+
+---
+
+## Usage
+
+1. Create an account
+
+2. Navigate through our services Resume Maker, Job Search, ATS Score Check
+
+3. Provide us with a little review of any inconvenience or praise
+
+---
+
+## Contributing
+
+Contributions are welcome! Follow these steps:
+
+- Fork the repository
+
+- Create a new branch
+```bash
+git checkout -b feature/your-feature
+```
+
+- Commit and push your changes
+```bash
+git commit -m "Add new feature"
+git push origin feature/your-feature
+```
+
+- Open a Pull Request
+
+- Please make sure to update documentation and tests if applicable.
+
+---
+
+## Contact
+
+Author: [Dev1903](https://github.com/Dev1903), [Sneha-jana](https://github.com/Sneha-jana), [Deba8016](https://github.com/Deba8016)
+
+Feel free to reach out for questions, suggestions, or collaboration opportunities.
