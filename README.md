@@ -1,17 +1,14 @@
 # Hire-Radar
 
-A comprehensive platform aiming to streamline job-hiring processes, bringing together employers and candidates in an efficient, user-friendly web application.
+A comprehensive platform aiming to streamline job-hiring processes, bringing candidates in an efficient, user-friendly web application.
 
 ---
 
 ## Features
-- Candidate registration, profile management and resume upload capabilities  
-- Employer dashboard: post jobs, review applications, manage listings  
-- Job search & filter functionality for candidates  
-- Real-time notifications / status updates for application progress  
-- Admin panel (optional) for site-wide moderation and control  
+- Candidate registration  
+- Job search & filter functionality for candidates   
 - Responsive UI supporting multiple device form-factors  
-- Secure authentication & authorization (user roles: candidate, employer, possibly admin)  
+- Secure authentication & authorization
 - RESTful backend API and decoupled frontend architecture  
 
 ---
@@ -57,7 +54,7 @@ npm run dev
 cd ../server
 
 # Install dependencies
-pip install -r requirements.txt  # if Python backend
+pip install -r requirements.txt
 
 # Start the backend server
 python app.py
