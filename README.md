@@ -19,7 +19,7 @@ A comprehensive platform aiming to streamline job-hiring processes, bringing tog
 ## Demo / Live Link
 Visit the live deployment here: [Hire-Radar Live](https://hire-radar.vercel.app)
 
-![Homepage Screenshot](/assets/#1.jpg)
+<img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%231.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%232.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%233.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%234.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%235.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%236.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%237.jpg" alt="Homepage Screenshot" width="200"/> <img src="https://github.com/Dev1903/Hire-Radar/blob/9af865edbee6b233dcea9b441315e5194e9e40ae/assets/%238.jpg" alt="Homepage Screenshot" width="200"/>
 
 ---
 
@@ -30,32 +30,6 @@ Visit the live deployment here: [Hire-Radar Live](https://hire-radar.vercel.app)
 - **Styling**: CSS, TailWind CSS, Daisy UI  
 - **Authentication**: Firebase Auth  
 - **Hosting/Deployment**: Vercel (frontend)  
-
----
-
-## Architecture & Structure
-
-Hire-Radar/
-├── client/
-│   ├── .dist/
-│   ├── public/
-│   └── src/
-│       ├── api/
-│       ├── assets/
-│       │   └── animations/
-│       ├── components/
-│       │   └── auth/
-│       ├── context/
-│       ├── css/
-│       ├── data/
-│       ├── pages/
-│       ├── section/
-│       │   └── Resume Generator/
-│       └── utils/
-└── server/
-    ├── fonts/
-    └── model/
-
 
 ---
 
