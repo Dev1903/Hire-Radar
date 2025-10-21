@@ -36,25 +36,26 @@ Visit the live deployment here: [Hire-Radar Live](https://hire-radar.vercel.app)
 ## Architecture & Structure
 
 Hire-Radar/
-├───client
-│   ├───.dist
-│   ├───public
-│   └───src
-│       ├───api
-│       ├───assets
-│       │   └───animations
-│       ├───components
-│       │   └───auth
-│       ├───context
-│       ├───css
-│       ├───data
-│       ├───pages
-│       ├───section
-│       │   └───Resume Generator
-│       └───utils
-└───server
-    ├───fonts
-    └───model
+├── client/
+│   ├── .dist/
+│   ├── public/
+│   └── src/
+│       ├── api/
+│       ├── assets/
+│       │   └── animations/
+│       ├── components/
+│       │   └── auth/
+│       ├── context/
+│       ├── css/
+│       ├── data/
+│       ├── pages/
+│       ├── section/
+│       │   └── Resume Generator/
+│       └── utils/
+└── server/
+    ├── fonts/
+    └── model/
+
 
 ---
 
