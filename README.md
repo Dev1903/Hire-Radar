@@ -19,7 +19,7 @@ A comprehensive platform aiming to streamline job-hiring processes, bringing tog
 ## Demo / Live Link
 Visit the live deployment here: [Hire-Radar Live](https://hire-radar.vercel.app)
 
-![Homepage Screenshot](./assets/#1.jpg)
+![Homepage Screenshot](/assets/#1.jpg)
 
 ---
 
