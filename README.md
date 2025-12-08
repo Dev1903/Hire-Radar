@@ -1,4 +1,4 @@
-# Hire-Radar
+# HireRadar
 
 A comprehensive platform aiming to streamline job-hiring processes, bringing candidates in an efficient, user-friendly web application.
 
